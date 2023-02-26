@@ -5,6 +5,15 @@ import datetime as dt
 import time
 import os
 import re
+import dotenv
+
+# Load the environment variables
+dotenv.load_dotenv()
+
+# Load private variables from .env
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+API_KEY = os.getenv('API_KEY')
 
 script_dir = os.path.dirname(os.path.abspath(__file__)) # Get the path to the directory containing this script
 config_path = os.path.join(script_dir, 'config.txt') # Construct the path to the configuration file
@@ -14,12 +23,9 @@ config = configparser.ConfigParser()
 config.read(config_path)
 
 # Initialize global variables from config.txt
-CLIENT_ID = config.get('strava', 'client_id')
-CLIENT_SECRET = config.get('strava', 'client_secret')
 REFRESH_TOKEN = config.get('strava', 'refresh_token')
 ACCESS_TOKEN = config.get('strava', 'access_token')
 expires_at = int(config.get('strava', 'expires_at'))
-API_KEY = config.get('open_weather', 'api_key')
 
 # Writes json input to 'sample.json' for testing
 def write_json(data):
