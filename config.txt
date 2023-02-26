@@ -1,0 +1,10 @@
+[strava]
+client_id = 101418
+client_secret = e21011ffaf6116bca9b7549863804cd192cef64a
+refresh_token = 2b3efe660d90acf0d899154e435b213763f51fa9
+access_token = d33c32d43e5f8fc270f7629603e9739264347daa
+expires_at = 1677375279
+
+[open_weather]
+api_key = 1a4a9038a72f56b8627cfd39cacb98b6
+

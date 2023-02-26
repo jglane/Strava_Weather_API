@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strava API</title>
+    <link rel="icon" href="strava_blue.png">
+</head>
+<body>
+    <header>
+        <h2>Strava API</h2>
+    </header>
+    <main>
+        <a id="authorize">Authorize</a>
+        <script>
+            const host = document.URL.match(/[^\/]+\/\/[^\/]*/g); // the url without "index.html"
+            document.getElementById("authorize").href = `http://www.strava.com/oauth/authorize?client_id=101418&response_type=code&redirect_uri=${host}/main.html&approval_prompt=force&scope=profile:read_all,activity:read_all,activity:write`;
+        </script>
+    </main>
+</body>
+</html>
