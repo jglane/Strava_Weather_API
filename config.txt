@@ -1,4 +1,5 @@
 [strava]
 refresh_token = 4d1e112c16b84a39d57fd42417a6923dd179a3d2
-access_token = f87ab0da5c69583a4853f8ca9bd1770e98941d2e
-expires_at = 1677463842
+access_token = df84ebef3ac9b9923a88e1ac5e364193444674e5
+expires_at = 1678347606
+

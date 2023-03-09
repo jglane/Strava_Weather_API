@@ -1,1 +1,0 @@
-python C:\Users\jonat\OneDrive\Documents\Strava_Weather_API\strava.py

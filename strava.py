@@ -15,8 +15,9 @@ CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 API_KEY = os.getenv('API_KEY')
 
-script_dir = os.path.dirname(os.path.abspath(__file__)) # Get the path to the directory containing this script
-config_path = os.path.join(script_dir, 'config.txt') # Construct the path to the configuration file
+# Construct the path to the configuration file
+script_dir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(script_dir, 'config.txt')
 
 # Load the configuration file
 config = configparser.ConfigParser()
@@ -74,9 +75,8 @@ while (True):
 
     # Get the index of the most recent activity that is not virtual or manual or 
     idx = 0
-    while (can_apply_weather(activities[idx])):
+    while (not can_apply_weather(activities[idx])):
         idx += 1
-    idx -= 1
 
     # Get the detailed data of the activity
     recent_activity = requests.get('https://www.strava.com/api/v3/activities/' + str(activities[idx]['id']),
@@ -84,9 +84,10 @@ while (True):
             'Authorization': 'Bearer ' + ACCESS_TOKEN
         }
     ).json()
+    write_json(recent_activity)
     
     # Check if the description already includes the weather data
-    if (not re.search(r'\d+.F \| \d+\.\d mph', recent_activity['description'])):
+    if (not recent_activity['description'] or not re.search(r'\d+.F \| \d+\.\d mph', recent_activity['description'])):
         start_date = int(dt.datetime.strptime(recent_activity['start_date'], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc).timestamp())
         end_date = start_date + recent_activity['elapsed_time']
         start_lat, start_lon = recent_activity['start_latlng']
@@ -119,9 +120,11 @@ while (True):
 
         # Format weather description
         description = f'{round(avg_temp)}{chr(176)}F | {round(avg_wind_speed * 10) / 10} mph {wind_arrow}'
-        if (not recent_activity['description']):
-            description = recent_activity['description'] + '\n' + description
         
+        # If there is no description, add one
+        if (recent_activity['description']):
+            description = recent_activity['description'] + '\n' + description
+
         # Add the description to the activity
         activity_id = recent_activity['id']
         requests.put(f'https://www.strava.com/api/v3/activities/{activity_id}',
@@ -136,5 +139,5 @@ while (True):
     
     # Print the description of the activity with the date
     activity_YMD = re.match(r'^(\d{4})-(\d{2})-(\d{2})', recent_activity['start_date_local']).group()
-    print('Description of activity on ' + activity_YMD + ':\n' + recent_activity['description'] + '\n')
+    print('Description of activity on ' + activity_YMD + ':\n' + str(recent_activity['description']) + '\n')
     time.sleep(180)
